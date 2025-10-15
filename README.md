@@ -95,7 +95,3 @@ To modify or extend the extension:
 2. Go to `chrome://extensions/`
 3. Click the refresh button on the extension card
 4. Test your changes
-
-## License
-
-This project is open source and available under the MIT License.
