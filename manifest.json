@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "USD to KAU Converter",
+  "version": "1.0",
+  "description": "Converts USD prices on web pages to their equivalent in KAU (Kinesis Gold).",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "https://api.kinesis.money/*",
+    "https://api.metals.live/*",
+    "https://api.goldapi.io/*",
+    "https://api.metalspriceapi.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "USD to KAU Converter"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["KAU_iconticker.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USD to Gold Converter</title>
+    <style>
+      body {
+        width: 320px;
+        min-height: 200px;
+        margin: 0;
+        padding: 16px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #f8f9fa;
+        color: #333;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .header h1 {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+        color: #2c3e50;
+      }
+
+      .header .subtitle {
+        font-size: 12px;
+        color: #7f8c8d;
+      }
+
+      .status-card {
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .status-row:last-child {
+        margin-bottom: 0;
+      }
+
+      .status-label {
+        font-weight: 500;
+        color: #555;
+      }
+
+      .status-value {
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .price-display {
+        font-size: 16px;
+        color: #27ae60;
+      }
+
+      .source-badge {
+        background: #3498db;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .source-badge.kau {
+        background: #e74c3c;
+      }
+
+      .source-badge.fallback {
+        background: #f39c12;
+      }
+
+      .last-updated {
+        font-size: 11px;
+        color: #95a5a6;
+      }
+
+      .controls {
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .control-group {
+        margin-bottom: 16px;
+      }
+
+      .control-group:last-child {
+        margin-bottom: 0;
+      }
+
+      .control-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      .toggle {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+      }
+
+      .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #27ae60;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+
+      .format-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: white;
+        font-size: 14px;
+      }
+
+      .format-select:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .btn-primary {
+        background: #3498db;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #2980b9;
+      }
+
+      .btn-secondary {
+        background: #ecf0f1;
+        color: #555;
+      }
+
+      .btn-secondary:hover {
+        background: #d5dbdb;
+      }
+
+      .error-state {
+        text-align: center;
+        color: #e74c3c;
+      }
+
+      .error-state .icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .loading {
+        text-align: center;
+        color: #7f8c8d;
+      }
+
+      .loading .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 11px;
+        color: #95a5a6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>🥇 USD to KAU</h1>
+      <div class="subtitle">Convert prices to KAU equivalents</div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-row">
+        <span class="status-label">KAU Price:</span>
+        <span class="status-value price-display" id="kauPrice">Loading...</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Source:</span>
+        <span class="source-badge" id="priceSource">Unknown</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Last Updated:</span>
+        <span class="last-updated" id="lastUpdated">Never</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label class="control-label">Enable Conversion</label>
+        <label class="toggle">
+          <input type="checkbox" id="enableToggle" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="formatSelect">Display Format</label>
+        <select class="format-select" id="formatSelect">
+          <option value="auto">Auto (μKAU/mKAU/KAU)</option>
+          <option value="kau">Always KAU</option>
+          <option value="milli-kau">Always Milli-KAU</option>
+          <option value="micro-kau">Always Micro-KAU</option>
+        </select>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary" id="refreshBtn">Refresh Price</button>
+        <button class="btn btn-secondary" id="testBtn">Test Page</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>1 KAU = 1 gram of gold</div>
+      <div>Hover over converted prices to see original USD</div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,154 @@
+/* USD to Gold Converter Styles */
+
+.usd-to-kau-converted {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #8b4513;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+  border: 1px solid #daa520;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  gap: 2px;
+}
+
+.usd-to-kau-converted:hover {
+  background: linear-gradient(135deg, #ffed4e, #ffd700);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  border-color: #b8860b;
+}
+
+.kau-icon {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+/* Tooltip styling */
+.usd-to-kau-converted[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 100000;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-family: Arial, sans-serif;
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+.usd-to-kau-converted[title]:hover::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #333;
+  margin-bottom: 3px;
+  z-index: 100000;
+}
+
+/* Error indicator */
+#usd-to-kau-error {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Ensure converted prices don't break layout */
+.usd-to-kau-converted {
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+/* Special styling for different contexts */
+.price .usd-to-kau-converted,
+.cost .usd-to-kau-converted,
+.amount .usd-to-kau-converted {
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/* Table cells */
+td .usd-to-kau-converted,
+th .usd-to-kau-converted {
+  display: inline-flex;
+  margin: 0;
+}
+
+/* Product pages */
+.product-price .usd-to-kau-converted,
+.price-display .usd-to-kau-converted {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+/* Shopping cart and checkout */
+.cart-item .usd-to-kau-converted,
+.checkout .usd-to-kau-converted {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  border: 2px solid #daa520;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .usd-to-kau-converted {
+    background: linear-gradient(135deg, #b8860b, #daa520);
+    color: #fff;
+    border-color: #8b4513;
+  }
+
+  .usd-to-kau-converted:hover {
+    background: linear-gradient(135deg, #daa520, #b8860b);
+    border-color: #8b4513;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .usd-to-kau-converted {
+    background: #ffd700;
+    color: #000;
+    border: 2px solid #000;
+    font-weight: bold;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .usd-to-kau-converted {
+    transition: none;
+  }
+
+  .usd-to-kau-converted:hover {
+    transform: none;
+  }
+
+  #usd-to-kau-error {
+    animation: none;
+  }
+}
