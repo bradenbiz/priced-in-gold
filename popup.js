@@ -86,6 +86,19 @@ class PopupController {
     this.elements.priceSource.textContent = source;
     this.elements.priceSource.className = `source-badge ${source.toLowerCase()}`;
 
+    // Make source clickable if it's gold-api.com
+    if (source === "gold-api.com") {
+      this.elements.priceSource.style.cursor = "pointer";
+      this.elements.priceSource.title = "Click to visit gold-api.com";
+      this.elements.priceSource.onclick = () => {
+        chrome.tabs.create({ url: "https://gold-api.com" });
+      };
+    } else {
+      this.elements.priceSource.style.cursor = "default";
+      this.elements.priceSource.title = "";
+      this.elements.priceSource.onclick = null;
+    }
+
     // Update last updated time
     this.elements.lastUpdated.textContent = this.formatTimeAgo(lastUpdated);
   }
@@ -95,6 +108,9 @@ class PopupController {
       '<span class="error-state">❌ Error</span>';
     this.elements.priceSource.textContent = "Error";
     this.elements.priceSource.className = "source-badge error";
+    this.elements.priceSource.style.cursor = "default";
+    this.elements.priceSource.title = "";
+    this.elements.priceSource.onclick = null;
     this.elements.lastUpdated.textContent = error || "Unknown error";
   }
 
@@ -103,6 +119,9 @@ class PopupController {
       '<span class="loading"><span class="spinner"></span>Loading...</span>';
     this.elements.priceSource.textContent = "Loading";
     this.elements.priceSource.className = "source-badge";
+    this.elements.priceSource.style.cursor = "default";
+    this.elements.priceSource.title = "";
+    this.elements.priceSource.onclick = null;
     this.elements.lastUpdated.textContent = "Please wait...";
   }
 
