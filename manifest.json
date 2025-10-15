@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "USD to KAU Converter",
+  "name": "Priced In Gold",
   "version": "1.0",
   "description": "Converts USD prices on web pages to their equivalent in KAU (Kinesis Gold).",
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "tabs"],
   "host_permissions": [
     "https://api.kinesis.money/*",
     "https://api.metals.live/*",
@@ -23,7 +23,12 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "USD to KAU Converter"
+    "default_title": "Priced In Gold",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
   },
   "icons": {
     "16": "icon16.png",

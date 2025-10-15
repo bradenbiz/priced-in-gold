@@ -206,6 +206,91 @@
         background: #d5dbdb;
       }
 
+      .btn-small {
+        padding: 4px 8px;
+        font-size: 12px;
+        flex: none;
+        width: auto;
+        min-width: 40px;
+      }
+
+      .url-exclusion-container {
+        margin-top: 8px;
+      }
+
+      .url-input-container {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .url-input-container input {
+        flex: 1;
+        padding: 6px 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+
+      .url-input-container input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      }
+
+      .url-list {
+        max-height: 120px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background: #fafafa;
+        margin-bottom: 8px;
+      }
+
+      .url-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 8px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 12px;
+      }
+
+      .url-item:last-child {
+        border-bottom: none;
+      }
+
+      .url-item .url-pattern {
+        flex: 1;
+        color: #555;
+        word-break: break-all;
+      }
+
+      .url-item .remove-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 10px;
+        cursor: pointer;
+        margin-left: 8px;
+      }
+
+      .url-item .remove-btn:hover {
+        background: #c0392b;
+      }
+
+      .url-help {
+        color: #7f8c8d;
+        font-size: 10px;
+        line-height: 1.3;
+      }
+
+      .url-list:empty {
+        display: none;
+      }
+
       .error-state {
         text-align: center;
         color: #e74c3c;
@@ -247,12 +332,47 @@
         font-size: 11px;
         color: #95a5a6;
       }
+
+      .header-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .disclaimer {
+        display: block;
+        color: #7f8c8d;
+        font-size: 8px;
+        line-height: 1;
+      }
     </style>
   </head>
   <body>
     <div class="header">
-      <h1>🥇 USD to KAU</h1>
-      <div class="subtitle">Convert prices to KAU equivalents</div>
+      <h1 class="header-title">
+        <img
+          src="icon48.png"
+          alt="Priced In Gold"
+          class="header-icon"
+          width="32"
+          height="32"
+        />
+        Priced In Gold
+      </h1>
+      <div class="subtitle">
+        Convert USD prices to KAU
+        <!-- <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://kinesis.money/gold?referrer=KM13867035"
+        > -->
+        (1 gram of gold)*
+        <!-- </a> -->
+      </div>
+      <div class="subtitle">
+        Hover over converted prices to see the original price.
+      </div>
     </div>
 
     <div class="status-card">
@@ -279,7 +399,7 @@
         </label>
       </div>
 
-      <div class="control-group">
+      <!-- <div class="control-group">
         <label class="control-label" for="formatSelect">Display Format</label>
         <select class="format-select" id="formatSelect">
           <option value="auto">Auto (μKAU/mKAU/KAU)</option>
@@ -287,17 +407,58 @@
           <option value="milli-kau">Always Milli-KAU</option>
           <option value="micro-kau">Always Micro-KAU</option>
         </select>
+      </div> -->
+
+      <div class="control-group">
+        <label class="control-label">Excluded URLs</label>
+        <div class="url-exclusion-container">
+          <div class="url-input-container">
+            <input
+              type="text"
+              id="urlInput"
+              placeholder="Enter URL pattern (e.g., *.google.com, example.com)"
+            />
+            <button type="button" id="addUrlBtn" class="btn btn-small">
+              Add
+            </button>
+          </div>
+          <div class="url-list" id="urlList">
+            <!-- URL patterns will be added here dynamically -->
+          </div>
+          <div class="url-help">
+            <small
+              >Use * for wildcards. Examples: *.google.com, example.com,
+              x.com/search, localhost:*</small
+            >
+          </div>
+        </div>
       </div>
 
       <div class="action-buttons">
         <button class="btn btn-primary" id="refreshBtn">Refresh Price</button>
-        <button class="btn btn-secondary" id="testBtn">Test Page</button>
+        <!-- <button class="btn btn-secondary" id="testBtn">Test Page</button> -->
       </div>
     </div>
 
     <div class="footer">
-      <div>1 KAU = 1 gram of gold</div>
-      <div>Hover over converted prices to see original USD</div>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://kms.kinesis.money/signup/KM13867035"
+      >
+        Sign up for Kinesis** to earn a free 1/2 oz of silver
+      </a>
+      <br />
+      <br />
+      <small class="disclaimer">
+        *Prices are approximate and are not guaranteed to be accurate. Prices
+        are calculated from the spot price of gold, and do not represent the
+        actual price of KAU on the Kinesis exchange.
+      </small>
+      <small class="disclaimer">
+        **This extension is not affiliated with Kinesis or any of its
+        affiliates.
+      </small>
     </div>
 
     <script src="popup.js"></script>

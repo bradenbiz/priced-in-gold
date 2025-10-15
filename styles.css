@@ -14,6 +14,7 @@
   align-items: center;
   position: relative;
   gap: 2px;
+  cursor: pointer;
 }
 
 .usd-to-kau-converted:hover {
@@ -30,38 +31,7 @@
   margin-right: 2px;
 }
 
-/* Tooltip styling */
-.usd-to-kau-converted[title]:hover::after {
-  content: attr(title);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #333;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 100000;
-  margin-bottom: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  font-family: Arial, sans-serif;
-  max-width: 300px;
-  word-wrap: break-word;
-}
-
-.usd-to-kau-converted[title]:hover::before {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: #333;
-  margin-bottom: 3px;
-  z-index: 100000;
-}
+/* Tooltip styling - removed custom tooltip, using browser native tooltip only */
 
 /* Error indicator */
 #usd-to-kau-error {

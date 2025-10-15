@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simplified Exclusion Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .test-section {
+        background: #f5f5f5;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+      .instructions {
+        background: #e8f4f8;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .status {
+        background: #fff3cd;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        border-left: 4px solid #ffc107;
+      }
+      .conversion-status {
+        font-weight: bold;
+        color: #2c3e50;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>✨ Simplified Exclusion Test</h1>
+
+    <div class="instructions">
+      <h2>Testing Simplified Approach</h2>
+      <p>
+        This page tests the simplified approach where the extension always
+        processes the page and lets the exclusion logic handle whether to show
+        conversions.
+      </p>
+    </div>
+
+    <div class="test-section">
+      <h2>Test Steps:</h2>
+      <ol>
+        <li>Load this page - should see conversions (if not excluded)</li>
+        <li>
+          Add this page's URL to exclusion list - conversions should disappear
+        </li>
+        <li>Remove URL from exclusion list - conversions should reappear</li>
+        <li>No need to refresh the page - everything should work smoothly</li>
+      </ol>
+    </div>
+
+    <div class="test-section">
+      <h2>Test Prices</h2>
+      <p>This item costs $25.99</p>
+      <p>Another item: $1,299.99</p>
+      <p>Total: $2,500.00</p>
+      <p>Fee: USD 15.50</p>
+      <p>Amount: 1,234.56 dollars</p>
+    </div>
+
+    <div class="test-section">
+      <h2>Expected Behavior</h2>
+      <div class="status">
+        <p class="conversion-status">✅ Simplified and Reliable</p>
+        <p>Extension always processes the page</p>
+        <p>Exclusion logic determines whether to show conversions</p>
+        <p>No complex message passing or timing issues</p>
+        <p>Works consistently in all scenarios</p>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>Current Page Info</h2>
+      <p><strong>Current URL:</strong> <span id="currentUrl"></span></p>
+      <p><strong>Hostname:</strong> <span id="hostname"></span></p>
+      <p>
+        <strong>Suggested exclusion pattern:</strong>
+        <span id="suggestedPattern"></span>
+      </p>
+    </div>
+
+    <script>
+      // Display current page information
+      document.getElementById("currentUrl").textContent = window.location.href;
+      document.getElementById("hostname").textContent =
+        window.location.hostname;
+
+      // Suggest exclusion pattern based on current URL
+      const hostname = window.location.hostname;
+      let suggestedPattern = hostname;
+      if (hostname === "localhost" || hostname.startsWith("127.0.0.1")) {
+        suggestedPattern = hostname;
+      } else if (hostname.includes(".")) {
+        suggestedPattern = `*.${hostname.split(".").slice(-2).join(".")}`;
+      }
+      document.getElementById("suggestedPattern").textContent =
+        suggestedPattern;
+    </script>
+  </body>
+</html>

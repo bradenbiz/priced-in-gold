@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exclusion Removal Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .test-section {
+        background: #f5f5f5;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+      .instructions {
+        background: #e8f4f8;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .status {
+        background: #fff3cd;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        border-left: 4px solid #ffc107;
+      }
+      .conversion-status {
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      .debug {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: monospace;
+        font-size: 12px;
+        margin: 10px 0;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .scenario {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+        border-left: 4px solid #28a745;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔄 Exclusion Removal Test</h1>
+
+    <div class="instructions">
+      <h2>Testing Exclusion Removal Scenario</h2>
+      <p>
+        This page tests the specific scenario where a URL is already excluded
+        when you visit the page, and then you remove it from the exclusion list.
+      </p>
+    </div>
+
+    <div class="scenario">
+      <h3>Test Scenario:</h3>
+      <ol>
+        <li>
+          Add this page's URL to the exclusion list (while on a different page)
+        </li>
+        <li>
+          Navigate to this page - should show disabled state with no conversions
+        </li>
+        <li>Remove the URL from the exclusion list</li>
+        <li>Verify that conversions appear immediately (without refreshing)</li>
+      </ol>
+    </div>
+
+    <div class="test-section">
+      <h2>Test Steps:</h2>
+      <ol>
+        <li>Open browser console (F12) to see debug logs</li>
+        <li>
+          <strong>Step 1:</strong> Add this page's URL to exclusion list (while
+          on another page)
+        </li>
+        <li>
+          <strong>Step 2:</strong> Navigate to this page - should see disabled
+          icon and no conversions
+        </li>
+        <li><strong>Step 3:</strong> Remove the URL from exclusion list</li>
+        <li><strong>Step 4:</strong> Verify conversions appear immediately</li>
+        <li>
+          <strong>Step 5:</strong> Check console for "Processing page for
+          conversions after exclusion removal"
+        </li>
+      </ol>
+    </div>
+
+    <div class="test-section">
+      <h2>Test Prices</h2>
+      <p>This item costs $25.99</p>
+      <p>Another item: $1,299.99</p>
+      <p>Total: $2,500.00</p>
+      <p>Fee: USD 15.50</p>
+      <p>Amount: 1,234.56 dollars</p>
+    </div>
+
+    <div class="test-section">
+      <h2>Expected Console Output</h2>
+      <div class="debug">
+        <strong>When removing from exclusion:</strong>
+        <br />=== handleExclusionUpdate called === <br />Current URL: [your-url]
+        <br />Current excludedUrls: [array without your pattern] <br />Is URL
+        excluded? false <br />URL is not excluded, setting normal icon and
+        processing page <br />Processing page for conversions after exclusion
+        removal <br />=== handleExclusionUpdate completed ===
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>Current Page Info</h2>
+      <p><strong>Current URL:</strong> <span id="currentUrl"></span></p>
+      <p><strong>Hostname:</strong> <span id="hostname"></span></p>
+      <p>
+        <strong>Suggested exclusion pattern:</strong>
+        <span id="suggestedPattern"></span>
+      </p>
+    </div>
+
+    <div class="test-section">
+      <h2>Expected Behavior</h2>
+      <div class="status">
+        <p class="conversion-status">
+          ✅ Fixed: Exclusion removal now processes page
+        </p>
+        <p>
+          When URL is removed from exclusion: page should be processed
+          immediately
+        </p>
+        <p>No need to refresh the page - conversions should appear instantly</p>
+      </div>
+    </div>
+
+    <script>
+      // Display current page information
+      document.getElementById("currentUrl").textContent = window.location.href;
+      document.getElementById("hostname").textContent =
+        window.location.hostname;
+
+      // Suggest exclusion pattern based on current URL
+      const hostname = window.location.hostname;
+      let suggestedPattern = hostname;
+      if (hostname === "localhost" || hostname.startsWith("127.0.0.1")) {
+        suggestedPattern = hostname;
+      } else if (hostname.includes(".")) {
+        suggestedPattern = `*.${hostname.split(".").slice(-2).join(".")}`;
+      }
+      document.getElementById("suggestedPattern").textContent =
+        suggestedPattern;
+
+      // Monitor for conversion changes
+      let conversionObserver = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.type === "childList") {
+            mutation.addedNodes.forEach(function (node) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const convertedElements = node.querySelectorAll(
+                  ".usd-to-kau-converted"
+                );
+                if (convertedElements.length > 0) {
+                  console.log(
+                    "Conversions detected:",
+                    convertedElements.length
+                  );
+                }
+              }
+            });
+            mutation.removedNodes.forEach(function (node) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const convertedElements = node.querySelectorAll(
+                  ".usd-to-kau-converted"
+                );
+                if (convertedElements.length > 0) {
+                  console.log("Conversions removed:", convertedElements.length);
+                }
+              }
+            });
+          }
+        });
+      });
+
+      // Start observing
+      conversionObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    </script>
+  </body>
+</html>
