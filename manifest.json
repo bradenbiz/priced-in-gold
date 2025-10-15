@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Priced In Gold",
   "version": "1.0.0",
-  "description": "Converts USD prices on web pages to their equivalent in grams of gold. See prices in real gold value with automatic conversion and hover tooltips.",
+  "description": "Converts USD prices on web pages to their equivalent in grams of gold.",
   "homepage_url": "https://github.com/bradenbisping/priced-in-gold",
   "permissions": ["storage", "activeTab"],
   "host_permissions": ["https://api.gold-api.com/*"],
