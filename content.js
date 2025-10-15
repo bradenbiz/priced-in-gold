@@ -188,7 +188,7 @@ class USDToKAUConverter {
       console.log("Sending setIcon message for hardcoded excluded state");
       chrome.runtime.sendMessage({
         action: "setIcon",
-        iconType: "hardcoded-excluded",
+        iconType: "hardcoded",
       });
     } else {
       console.log("Sending setIcon message for disabled state");
@@ -286,8 +286,8 @@ class USDToKAUConverter {
       return hostname.startsWith("127.0.0.1");
     }
 
-    // Exact hostname match
-    return hostname === pattern;
+    // Exact hostname match or subdomain match
+    return hostname === pattern || hostname.endsWith(`.${pattern}`);
   }
 
   checkUrlExclusion() {

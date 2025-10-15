@@ -400,8 +400,8 @@ class PopupController {
       return hostname.startsWith("127.0.0.1");
     }
 
-    // Exact hostname match
-    return hostname === pattern;
+    // Exact hostname match or subdomain match
+    return hostname === pattern || hostname.endsWith(`.${pattern}`);
   }
 
   isValidUrlPattern(pattern) {

@@ -212,7 +212,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         title: "Priced In Gold (Disabled)",
       });
       console.log("Set to disabled icon");
-    } else if (iconType === "hardcoded-excluded") {
+    } else if (iconType === "hardcoded") {
       chrome.action.setIcon({
         path: {
           16: "icon16-hardcoded.png",
@@ -221,7 +221,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         },
       });
       chrome.action.setTitle({
-        title: "Priced In Gold (Hardcoded Excluded)",
+        title: "Priced In Gold (Not needed on this site)",
       });
       console.log("Set to hardcoded excluded icon");
     } else if (iconType === "normal") {
@@ -292,19 +292,6 @@ async function updateIconForTab(tab) {
       return;
     }
 
-    // If no exclusions, set normal icon
-    if (excludedUrls.length === 0) {
-      chrome.action.setIcon({
-        path: {
-          16: "icon16.png",
-          48: "icon48.png",
-          128: "icon128.png",
-        },
-      });
-      chrome.action.setTitle({ title: "Priced In Gold" });
-      return;
-    }
-
     // Check if current tab URL is excluded
     const currentUrl = new URL(tab.url);
     const hostname = currentUrl.hostname;
@@ -319,40 +306,53 @@ async function updateIconForTab(tab) {
       }
     }
 
-    const isExcluded =
-      isHardcodedExcluded ||
-      excludedUrls.some((pattern) => {
-        return matchesUrlPattern(hostname, fullUrl, pattern);
+    // If hardcoded excluded, set hardcoded icon and return
+    if (isHardcodedExcluded) {
+      chrome.action.setIcon({
+        path: {
+          16: "icon16-hardcoded.png",
+          48: "icon48-hardcoded.png",
+          128: "icon128-hardcoded.png",
+        },
       });
+      chrome.action.setTitle({
+        title: "Priced In Gold (Not needed on this site)",
+      });
+      console.log("Tab is hardcoded excluded:", tab.url);
+      return;
+    }
 
-    if (isExcluded) {
-      if (isHardcodedExcluded) {
-        // Set hardcoded excluded icon for hardcoded excluded sites
-        chrome.action.setIcon({
-          path: {
-            16: "icon16-hardcoded.png",
-            48: "icon48-hardcoded.png",
-            128: "icon128-hardcoded.png",
-          },
-        });
-        chrome.action.setTitle({
-          title: "Priced In Gold (Hardcoded Excluded)",
-        });
-        console.log("Tab is hardcoded excluded:", tab.url);
-      } else {
-        // Set disabled icon for user-excluded site
-        chrome.action.setIcon({
-          path: {
-            16: "icon16-disabled.png",
-            48: "icon48-disabled.png",
-            128: "icon128-disabled.png",
-          },
-        });
-        chrome.action.setTitle({
-          title: "Priced In Gold (Disabled on this site)",
-        });
-        console.log("Tab is user excluded:", tab.url);
-      }
+    // If no user exclusions, set normal icon
+    if (excludedUrls.length === 0) {
+      chrome.action.setIcon({
+        path: {
+          16: "icon16.png",
+          48: "icon48.png",
+          128: "icon128.png",
+        },
+      });
+      chrome.action.setTitle({ title: "Priced In Gold" });
+      return;
+    }
+
+    // Check if current tab URL matches any user-excluded patterns
+    const isUserExcluded = excludedUrls.some((pattern) => {
+      return matchesUrlPattern(hostname, fullUrl, pattern);
+    });
+
+    if (isUserExcluded) {
+      // Set disabled icon for user-excluded site
+      chrome.action.setIcon({
+        path: {
+          16: "icon16-disabled.png",
+          48: "icon48-disabled.png",
+          128: "icon128-disabled.png",
+        },
+      });
+      chrome.action.setTitle({
+        title: "Priced In Gold (Disabled on this site)",
+      });
+      console.log("Tab is user excluded:", tab.url);
     } else {
       // Set normal icon
       chrome.action.setIcon({
@@ -425,8 +425,8 @@ function matchesUrlPattern(hostname, fullUrl, pattern) {
     return hostname.startsWith("127.0.0.1");
   }
 
-  // Exact hostname match
-  return hostname === pattern;
+  // Exact hostname match or subdomain match
+  return hostname === pattern || hostname.endsWith(`.${pattern}`);
 }
 
 // Function to set icon based on enabled state
